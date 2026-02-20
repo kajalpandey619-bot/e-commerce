@@ -12,10 +12,10 @@ function ProductDetails() {
     console.log(product, "id");
 
     const handleAddToCart = () => {
-        // if (!localStorage.getItem('access_token')) {
-        //     window.location.href = '/';
-        //     return;
-        // }
+        if (!localStorage.getItem('access_token')) {
+            window.location.href = '/login';
+            return;
+        }
         addToCart(product.id);
     }
 

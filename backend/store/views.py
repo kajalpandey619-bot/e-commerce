@@ -127,10 +127,3 @@ def register_view(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# {
-#     "username": "John Doe",
-#     "email": "john@gmail.com",
-#     "password": "123456",
-#     "password2": "123456"
-# }
-

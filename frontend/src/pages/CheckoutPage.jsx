@@ -1,6 +1,7 @@
-import { use, useState } from 'react';
+import { useState } from 'react';
 import { useCart } from "../context/CartContext";
 import { useNavigate } from 'react-router-dom';
+import { authFetch } from '../utils.js/auth';
 
 function CheckoutPage() {
     const BASEURL = import.meta.env.VITE_DJANGO_BASE_URL;
@@ -28,23 +29,17 @@ function CheckoutPage() {
         setLoading(true);
         setMessage("");
         try {
-            const res = await fetch(`${BASEURL}/api/orders/create/`, {
+            const res = await authFetch(`${BASEURL}/api/orders/create/`, {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
                 body: JSON.stringify(form),
             });
             const data = await res.json();
             if (res.ok) {
-                setMessage("Order placed successfully!");
-                fetch(`${BASEURL}/api/cart/`)
+                alert("Order placed successfully!");
                 clearCart();
-                setTimeout(() => {
-                    navigate('/')
-                }, 2000);
-            } else {
-                setMessage(data.error || "Failed to place order.Please try again.");
+                navigate('/')
+            }else{
+                setMessage(data.detail || "Failed to place order");
             }
         } catch (error) {
             setMessage("An error occurred. Please try again.");
@@ -52,9 +47,9 @@ function CheckoutPage() {
     }
 
     return (
-         <div className="pt-20 p-6">
-      <div className="max-w-lg mx-auto bg-white p-6 shadow rounded">
-        <h1 className="text-2xl font-bold mb-4">Checkout</h1>
+        <div className="pt-20 p-6">
+            <div className="max-w-lg mx-auto bg-white p-6 shadow rounded">
+                <h1 className="text-2xl font-bold mb-4">Checkout</h1>
                 <form onSubmit={handleSubmit} className='space-y-3'>
                     <input
                         type="text"
